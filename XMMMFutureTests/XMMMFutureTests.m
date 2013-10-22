@@ -79,4 +79,40 @@
     [promise reject:error1];
 }
 
+- (void)testMap
+{
+    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMFuture *future1 = promise.future;
+    
+    NSString *str1 = @"Hello";
+    
+    XMMMFuture *future2 = [future1 map:^id(id result) {
+        return [result stringByAppendingString:@", world!"];
+    }];
+    
+    XCTAssertNotNil(future2, @"Mapped Future should not be nil.");
+    
+    [future2 success:^(id result) {
+        XCTAssertEqualObjects(result, @"Hello, world!", @"");
+    }];
+    
+    [promise resolve:str1];
+}
+
+//- (void)testFlatMap
+//{
+//    XMMMPromise *promise1 = [XMMMPromise promise];
+//    XMMMFuture *future1 = promise1.future;
+//    
+//    NSString *str1 = @"Hello";
+//    
+//    XMMMFuture *future3 = [future1 flatMap:^XMMMFuture *(id result) {
+//        XMMMPromise *promise2 = [XMMMPromise promise];
+//        XMMMFuture *future2 = promise2.future;
+//        
+//        [promise2 resolve:[result stringByAppendingString:@", world!"]];
+//        return future2;
+//    }];
+//}
+
 @end

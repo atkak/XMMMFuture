@@ -12,6 +12,10 @@
 
 typedef void (^XMMMFutureSuccessBlock)(id result);
 typedef void (^XMMMFutureFailureBlock)(NSError *error);
+typedef id (^XMMMFutureMapBlock)(id result);
+typedef XMMMFuture * (^XMMMFutureFlatMapBlock)(id result);
+typedef id (^XMMMFutureRecoverBlock)(NSError *error);
+typedef XMMMFuture * (^XMMMFutureRecoverWithBlock)(NSError *error);
 
 @interface XMMMFuture : NSObject
 
@@ -19,5 +23,10 @@ typedef void (^XMMMFutureFailureBlock)(NSError *error);
 
 - (void)success:(XMMMFutureSuccessBlock)block;
 - (void)failure:(XMMMFutureFailureBlock)block;
+
+- (XMMMFuture *)map:(XMMMFutureMapBlock)block;
+- (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block;
+- (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block;
+- (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block;
 
 @end

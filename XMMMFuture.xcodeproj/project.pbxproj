@@ -18,6 +18,7 @@
 		C88D2EF01816C09F00C23521 /* XMMMFutureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EEF1816C09F00C23521 /* XMMMFutureTests.m */; };
 		C88D2EFB1816C0B400C23521 /* XMMMPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFA1816C0B400C23521 /* XMMMPromise.m */; };
 		C88D2EFE1816C0C900C23521 /* XMMMConcreteFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */; };
+		C88D2F011816D26000C23521 /* XMMMMappedFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2F001816D26000C23521 /* XMMMMappedFuture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		C88D2EFA1816C0B400C23521 /* XMMMPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMPromise.m; sourceTree = "<group>"; };
 		C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMConcreteFuture.h; sourceTree = "<group>"; };
 		C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFuture.m; sourceTree = "<group>"; };
+		C88D2EFF1816D26000C23521 /* XMMMMappedFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMMappedFuture.h; sourceTree = "<group>"; };
+		C88D2F001816D26000C23521 /* XMMMMappedFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMMappedFuture.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,8 @@
 				C88D2EFA1816C0B400C23521 /* XMMMPromise.m */,
 				C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */,
 				C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */,
+				C88D2EFF1816D26000C23521 /* XMMMMappedFuture.h */,
+				C88D2F001816D26000C23521 /* XMMMMappedFuture.m */,
 				C88D2ED61816C09F00C23521 /* Supporting Files */,
 			);
 			path = XMMMFuture;
@@ -236,6 +241,7 @@
 			files = (
 				C88D2EFB1816C0B400C23521 /* XMMMPromise.m in Sources */,
 				C88D2EFE1816C0C900C23521 /* XMMMConcreteFuture.m in Sources */,
+				C88D2F011816D26000C23521 /* XMMMMappedFuture.m in Sources */,
 				C88D2EDB1816C09F00C23521 /* XMMMFuture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

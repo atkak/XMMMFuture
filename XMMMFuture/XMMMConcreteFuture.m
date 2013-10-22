@@ -7,6 +7,7 @@
 //
 
 #import "XMMMConcreteFuture.h"
+#import "XMMMMappedFuture.h"
 
 typedef NS_ENUM(NSInteger, XMMMFutureState) {
     XMMMFutureStateImcomplete,
@@ -47,6 +48,8 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return self;
 }
 
+#pragma mark - Public methods (Future handlers)
+
 - (void)success:(XMMMFutureSuccessBlock)block
 {
     @synchronized(self) {
@@ -70,6 +73,30 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
         }
     }
 }
+
+#pragma mark - Public methods (Future conbinators)
+
+- (XMMMFuture *)map:(XMMMFutureMapBlock)block
+{
+    return [XMMMMappedFuture futureWithFuture:self mapBlock:block];
+}
+
+- (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block
+{
+    return [XMMMMappedFuture futureWithFuture:self flatMapBlock:block];
+}
+
+- (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
+{
+    return nil;
+}
+
+- (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block
+{
+    return nil;
+}
+
+#pragma mark - Public methods (Promise resolvers)
 
 - (void)resolve:(id)result
 {
