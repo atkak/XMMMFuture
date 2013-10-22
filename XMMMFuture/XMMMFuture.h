@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class XMMMFuture;
+
+typedef void (^XMMMFutureSuccessBlock)(id result);
+typedef void (^XMMMFutureFailureBlock)(NSError *error);
+
 @interface XMMMFuture : NSObject
+
+@property (nonatomic, readonly) BOOL completed;
+
+- (void)success:(XMMMFutureSuccessBlock)block;
+- (void)failure:(XMMMFutureFailureBlock)block;
 
 @end

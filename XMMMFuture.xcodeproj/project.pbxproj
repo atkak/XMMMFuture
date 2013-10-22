@@ -16,6 +16,8 @@
 		C88D2EE81816C09F00C23521 /* libXMMMFuture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88D2ED01816C09F00C23521 /* libXMMMFuture.a */; };
 		C88D2EEE1816C09F00C23521 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C88D2EEC1816C09F00C23521 /* InfoPlist.strings */; };
 		C88D2EF01816C09F00C23521 /* XMMMFutureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EEF1816C09F00C23521 /* XMMMFutureTests.m */; };
+		C88D2EFB1816C0B400C23521 /* XMMMPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFA1816C0B400C23521 /* XMMMPromise.m */; };
+		C88D2EFE1816C0C900C23521 /* XMMMConcreteFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,10 @@
 		C88D2EEB1816C09F00C23521 /* XMMMFutureTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XMMMFutureTests-Info.plist"; sourceTree = "<group>"; };
 		C88D2EED1816C09F00C23521 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C88D2EEF1816C09F00C23521 /* XMMMFutureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XMMMFutureTests.m; sourceTree = "<group>"; };
+		C88D2EF91816C0B400C23521 /* XMMMPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMPromise.h; sourceTree = "<group>"; };
+		C88D2EFA1816C0B400C23521 /* XMMMPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMPromise.m; sourceTree = "<group>"; };
+		C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMConcreteFuture.h; sourceTree = "<group>"; };
+		C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFuture.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,10 @@
 			children = (
 				C88D2ED81816C09F00C23521 /* XMMMFuture.h */,
 				C88D2EDA1816C09F00C23521 /* XMMMFuture.m */,
+				C88D2EF91816C0B400C23521 /* XMMMPromise.h */,
+				C88D2EFA1816C0B400C23521 /* XMMMPromise.m */,
+				C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */,
+				C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */,
 				C88D2ED61816C09F00C23521 /* Supporting Files */,
 			);
 			path = XMMMFuture;
@@ -224,6 +234,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C88D2EFB1816C0B400C23521 /* XMMMPromise.m in Sources */,
+				C88D2EFE1816C0C900C23521 /* XMMMConcreteFuture.m in Sources */,
 				C88D2EDB1816C09F00C23521 /* XMMMFuture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
