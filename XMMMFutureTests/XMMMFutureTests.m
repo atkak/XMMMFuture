@@ -175,6 +175,8 @@
         return future2;
     }];
     
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
         self.completed = YES;
@@ -201,6 +203,8 @@
         return nil;
     }];
     
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
         self.completed = YES;
@@ -223,6 +227,7 @@
     });
     
     NSError *error1 = [self error];
+    
     XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
         XMMMPromise *promise2 = [XMMMPromise defaultPromise];
         XMMMFuture *future2 = promise2.future;
@@ -233,6 +238,8 @@
         
         return future2;
     }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
@@ -261,6 +268,8 @@
         return obj;
     }];
     
+    XCTAssertNotNil(composedFuture, @"Mapped Future should not be nil.");
+    
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj, @"");
         self.completed = YES;
@@ -286,6 +295,8 @@
         XCTFail(@"");
         return nil;
     }];
+    
+    XCTAssertNotNil(composedFuture, @"Mapped Future should not be nil.");
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj, @"");
@@ -321,6 +332,8 @@
         return future2;
     }];
     
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"");
         self.completed = YES;
@@ -347,6 +360,8 @@
         XCTFail(@"");
         return nil;
     }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"");
@@ -381,6 +396,8 @@
         
         return future2;
     }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
