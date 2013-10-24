@@ -10,7 +10,7 @@
 #import "XMMMMappedFuture.h"
 
 typedef NS_ENUM(NSInteger, XMMMFutureState) {
-    XMMMFutureStateImcomplete,
+    XMMMFutureStateIncomplete,
     XMMMFutureStateSucceeded,
     XMMMFutureStateFailed,
     XMMMFutureStateFinished
@@ -43,17 +43,17 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 {
     self = [super init];
     if (self) {
-        _state = XMMMFutureStateImcomplete;
+        _state = XMMMFutureStateIncomplete;
     }
     return self;
 }
 
 #pragma mark - Public methods (Future handlers)
 
-- (void)success:(XMMMFutureSuccessBlock)block
+- (void)addSuccessObserverWithBlock:(XMMMFutureSuccessBlock)block
 {
     @synchronized(self) {
-        if (self.state == XMMMFutureStateImcomplete) {
+        if (self.state == XMMMFutureStateIncomplete) {
             self.successBlock = block;
         } else if (self.state == XMMMFutureStateSucceeded) {
             block(self.result);
@@ -62,10 +62,10 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
 }
 
-- (void)failure:(XMMMFutureFailureBlock)block
+- (void)addFailureObserverWithBlock:(XMMMFutureFailureBlock)block
 {
     @synchronized(self) {
-        if (self.state == XMMMFutureStateImcomplete) {
+        if (self.state == XMMMFutureStateIncomplete) {
             self.failureBlock = block;
         } else if (self.state == XMMMFutureStateFailed) {
             block(self.error);
@@ -98,10 +98,10 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 #pragma mark - Public methods (Promise resolvers)
 
-- (void)resolve:(id)result
+- (void)resolveWithObject:(id)result
 {
     @synchronized(self) {
-        if (self.state != XMMMFutureStateImcomplete) {
+        if (self.state != XMMMFutureStateIncomplete) {
             return;
         }
         
@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
 }
 
-- (void)reject:(NSError *)error
+- (void)rejectWithError:(NSError *)error
 {
     if (!error) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
     
     @synchronized(self) {
-        if (self.state != XMMMFutureStateImcomplete) {
+        if (self.state != XMMMFutureStateIncomplete) {
             return;
         }
         

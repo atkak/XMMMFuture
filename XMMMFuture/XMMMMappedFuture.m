@@ -32,13 +32,13 @@
     if (self) {
         _originalFuture = future;
         
-        [future success:^(id result) {
+        [future addSuccessObserverWithBlock:^(id result) {
             id newResult = block(result);
-            [self resolve:newResult];
+            [self resolveWithObject:newResult];
         }];
         
-        [future failure:^(NSError *error) {
-            [self reject:error];
+        [future addFailureObserverWithBlock:^(NSError *error) {
+            [self rejectWithError:error];
         }];
     }
     return self;
@@ -50,20 +50,20 @@
     if (self) {
         _originalFuture = future;
         
-        [future success:^(id result) {
+        [future addSuccessObserverWithBlock:^(id result) {
             XMMMFuture *newFuture = block(result);
             
-            [newFuture success:^(id result) {
-                [self resolve:result];
+            [newFuture addSuccessObserverWithBlock:^(id result) {
+                [self resolveWithObject:result];
             }];
             
-            [newFuture failure:^(NSError *error) {
-                [self reject:error];
+            [newFuture addFailureObserverWithBlock:^(NSError *error) {
+                [self rejectWithError:error];
             }];
         }];
         
-        [future failure:^(NSError *error) {
-            [self reject:error];
+        [future addFailureObserverWithBlock:^(NSError *error) {
+            [self rejectWithError:error];
         }];
     }
     return self;

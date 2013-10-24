@@ -21,8 +21,8 @@ typedef XMMMFuture * (^XMMMFutureRecoverWithBlock)(NSError *error);
 
 @property (nonatomic, readonly) BOOL completed;
 
-- (void)success:(XMMMFutureSuccessBlock)block;
-- (void)failure:(XMMMFutureFailureBlock)block;
+- (void)addSuccessObserverWithBlock:(XMMMFutureSuccessBlock)block;
+- (void)addFailureObserverWithBlock:(XMMMFutureFailureBlock)block;
 
 - (XMMMFuture *)map:(XMMMFutureMapBlock)block;
 - (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block;

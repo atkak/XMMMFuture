@@ -36,7 +36,7 @@
 
 - (void)testPromiseCreation
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     
     XCTAssertNotNil(promise, @"Instance should not be nil.");
 
@@ -45,7 +45,7 @@
 
 - (void)testFutureCreation
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     XMMMFuture *future = promise.future;
     
     XCTAssertNotNil(future, @"Future should not be nil.");
@@ -55,21 +55,21 @@
 
 - (void)testResolve
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     XMMMFuture *future = promise.future;
 
     NSObject *obj1 = [NSObject new];
     
-    [future success:^(id result) {
+    [future addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
     }];
     
-    [future failure:^(NSError *error) {
+    [future addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
     }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise resolve:obj1];
+        [promise resolveWithObject:obj1];
         self.completed = YES;
     });
     
@@ -77,27 +77,27 @@
 
 - (void)testReject
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     XMMMFuture *future = promise.future;
     
     NSError *error1 = [NSError errorWithDomain:@"test" code:1 userInfo:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise reject:error1];
+        [promise rejectWithError:error1];
         self.completed = YES;
     });
     
-    [future success:^(id result) {
+    [future addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"Success block should not be called.");
     }];
     
-    [future failure:^(NSError *error) {
+    [future addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
     }];
 }
 
 - (void)testMap
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise.future;
     
     XMMMFuture *future2 = [future1 map:^id(id result) {
@@ -108,18 +108,18 @@
     
     NSString *str1 = @"Hello";
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise resolve:str1];
+        [promise resolveWithObject:str1];
         self.completed = YES;
     });
     
-    [future2 success:^(id result) {
+    [future2 addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
     }];
 }
 
 - (void)testMapFailed
 {
-    XMMMPromise *promise = [XMMMPromise promise];
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise.future;
     
     XMMMFuture *future2 = [future1 map:^id(id result) {
@@ -131,46 +131,46 @@
     
     NSError *error1 = [NSError errorWithDomain:@"test" code:1 userInfo:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise reject:error1];
+        [promise rejectWithError:error1];
         self.completed = YES;
     });
     
-    [future2 success:^(id result) {
+    [future2 addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
     }];
     
-    [future2 failure:^(NSError *error) {
+    [future2 addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqual(error, error1, @"");
     }];
 }
 
 - (void)testFlatMap
 {
-    XMMMPromise *promise1 = [XMMMPromise promise];
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
     
     NSString *str1 = @"Hello";
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise1 resolve:str1];
+        [promise1 resolveWithObject:str1];
     });
     
     XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
-        XMMMPromise *promise2 = [XMMMPromise promise];
+        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
         XMMMFuture *future2 = promise2.future;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 resolve:[result stringByAppendingString:@", world!"]];
+            [promise2 resolveWithObject:[result stringByAppendingString:@", world!"]];
         });
         
         return future2;
     }];
     
-    [composedFuture success:^(id result) {
+    [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
         self.completed = YES;
     }];
     
-    [composedFuture failure:^(NSError *error) {
+    [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
         self.completed = YES;
     }];
@@ -178,31 +178,25 @@
 
 - (void)testFlatMapFirstFutureFailed
 {
-    XMMMPromise *promise1 = [XMMMPromise promise];
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
     
     NSError *error1 = [NSError errorWithDomain:@"test" code:1 userInfo:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [promise1 reject:error1];
+        [promise1 rejectWithError:error1];
     });
     
     XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
-        XMMMPromise *promise2 = [XMMMPromise promise];
-        XMMMFuture *future2 = promise2.future;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 resolve:[result stringByAppendingString:@", world!"]];
-        });
-        
-        return future2;
+        XCTFail(@"");
+        return nil;
     }];
     
-    [composedFuture success:^(id result) {
+    [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
         self.completed = YES;
     }];
     
-    [composedFuture failure:^(NSError *error) {
+    [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqualObjects(error, error1, @"");
         self.completed = YES;
     }];

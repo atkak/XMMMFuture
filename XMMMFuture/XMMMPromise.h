@@ -12,9 +12,9 @@
 
 @property (nonatomic, readonly) XMMMFuture *future;
 
-+ (instancetype)promise;
++ (instancetype)defaultPromise;
 
-- (void)resolve:(id)result;
-- (void)reject:(NSError *)error;
+- (void)resolveWithObject:(id)result;
+- (void)rejectWithError:(NSError *)error;
 
 @end

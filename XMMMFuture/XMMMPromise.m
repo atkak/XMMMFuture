@@ -11,7 +11,7 @@
 
 @implementation XMMMPromise
 
-+ (instancetype)promise
++ (instancetype)defaultPromise
 {
     return (XMMMPromise *)[XMMMConcreteFuture new];
 }
