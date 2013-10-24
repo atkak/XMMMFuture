@@ -12,7 +12,11 @@
 
 + (instancetype)futureWithFuture:(XMMMFuture *)future mapBlock:(XMMMFutureMapBlock)block;
 + (instancetype)futureWithFuture:(XMMMFuture *)future flatMapBlock:(XMMMFutureFlatMapBlock)block;
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block;
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block;
 - (instancetype)initWithFuture:(XMMMFuture *)future mapBlock:(XMMMFutureMapBlock)block;
 - (instancetype)initWithFuture:(XMMMFuture *)future flatMapBlock:(XMMMFutureFlatMapBlock)block;
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block;
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block;
 
 @end

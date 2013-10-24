@@ -26,6 +26,16 @@
     return [[self alloc] initWithFuture:future flatMapBlock:block];
 }
 
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block
+{
+    return [[self alloc] initWithFuture:future recoverBlock:block];
+}
+
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block
+{
+    return [[self alloc] initWithFuture:future recoverWithBlock:block];
+}
+
 - (instancetype)initWithFuture:(XMMMFuture *)future mapBlock:(XMMMFutureMapBlock)block
 {
     self = [super init];
@@ -64,6 +74,55 @@
         
         [future addFailureObserverWithBlock:^(NSError *error) {
             [self rejectWithError:error];
+        }];
+    }
+    return self;
+}
+
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block
+{
+    self = [super init];
+    if (self) {
+        _originalFuture = future;
+        
+        [future addSuccessObserverWithBlock:^(id result) {
+            [self resolveWithObject:result];
+        }];
+        
+        [future addFailureObserverWithBlock:^(NSError *error) {
+            id newResult = block(error);
+            
+            if ([newResult isKindOfClass:[NSError class]]) {
+                NSError *newError = (NSError *)newResult;
+                [self rejectWithError:newError];
+            } else {
+                [self resolveWithObject:newResult];
+            }
+        }];
+    }
+    return self;
+}
+
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block
+{
+    self = [super init];
+    if (self) {
+        _originalFuture = future;
+        
+        [future addSuccessObserverWithBlock:^(id result) {
+            [self resolveWithObject:result];
+        }];
+        
+        [future addFailureObserverWithBlock:^(NSError *error) {
+            XMMMFuture *newFuture = block(error);
+            
+            [newFuture addSuccessObserverWithBlock:^(id result) {
+                [self resolveWithObject:result];
+            }];
+            
+            [newFuture addFailureObserverWithBlock:^(NSError *error) {
+                [self rejectWithError:error];
+            }];
         }];
     }
     return self;

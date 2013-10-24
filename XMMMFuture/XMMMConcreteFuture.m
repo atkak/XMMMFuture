@@ -88,12 +88,12 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 - (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
 {
-    return nil;
+    return [XMMMMappedFuture futureWithFuture:self recoverBlock:block];
 }
 
 - (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block
 {
-    return nil;
+    return [XMMMMappedFuture futureWithFuture:self recoverWithBlock:block];
 }
 
 #pragma mark - Public methods (Promise resolvers)
