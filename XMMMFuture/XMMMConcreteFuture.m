@@ -56,8 +56,11 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
         if (self.state == XMMMFutureStateIncomplete) {
             self.successBlock = block;
         } else if (self.state == XMMMFutureStateSucceeded) {
-            block(self.result);
             self.state = XMMMFutureStateFinished;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(self.result);
+            });
         }
     }
 }
@@ -68,8 +71,11 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
         if (self.state == XMMMFutureStateIncomplete) {
             self.failureBlock = block;
         } else if (self.state == XMMMFutureStateFailed) {
-            block(self.error);
             self.state = XMMMFutureStateFinished;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(self.error);
+            });
         }
     }
 }

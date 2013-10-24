@@ -64,6 +64,9 @@
     XMMMFuture *future = promise.future;
 
     NSObject *obj1 = [NSObject new];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise resolveWithObject:obj1];
+    });
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
@@ -74,10 +77,25 @@
         XCTFail(@"Failure block should not be called.");
         self.completed = YES;
     }];
+}
+
+- (void)testResolveAlreadyResolved
+{
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
+    XMMMFuture *future = promise.future;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [promise resolveWithObject:obj1];
-    });
+    NSObject *obj1 = [NSObject new];
+    [promise resolveWithObject:obj1];
+    
+    [future addSuccessObserverWithBlock:^(id result) {
+        XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
+        self.completed = YES;
+    }];
+    
+    [future addFailureObserverWithBlock:^(NSError *error) {
+        XCTFail(@"Failure block should not be called.");
+        self.completed = YES;
+    }];
 }
 
 - (void)testReject
@@ -89,6 +107,25 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [promise rejectWithError:error1];
     });
+    
+    [future addSuccessObserverWithBlock:^(id result) {
+        XCTFail(@"Success block should not be called.");
+        self.completed = YES;
+    }];
+    
+    [future addFailureObserverWithBlock:^(NSError *error) {
+        XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
+        self.completed = YES;
+    }];
+}
+
+- (void)testRejectAlreadyRejected
+{
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
+    XMMMFuture *future = promise.future;
+    
+    NSError *error1 = [self error];
+    [promise rejectWithError:error1];
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"Success block should not be called.");
