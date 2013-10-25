@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "XMMMPromise.h"
 
 @interface XMMMPromiseTests : XCTestCase
 
@@ -17,13 +18,26 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here; it will be run once, before the first test case.
+    
 }
 
 - (void)tearDown
 {
-    // Put teardown code here; it will be run once, after the last test case.
+    
     [super tearDown];
+}
+
+#pragma mark - Test methods
+
+- (void)testCreation
+{
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
+    
+    XCTAssertNotNil(promise, @"Promise should not be nil.");
+    
+    XMMMFuture *future = promise.future;
+    
+    XCTAssertNotNil(future, @"Future should not be nil.");
 }
 
 @end
