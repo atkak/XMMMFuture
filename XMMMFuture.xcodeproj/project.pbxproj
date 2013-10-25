@@ -19,6 +19,10 @@
 		C88D2EFB1816C0B400C23521 /* XMMMPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFA1816C0B400C23521 /* XMMMPromise.m */; };
 		C88D2EFE1816C0C900C23521 /* XMMMConcreteFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */; };
 		C88D2F011816D26000C23521 /* XMMMMappedFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = C88D2F001816D26000C23521 /* XMMMMappedFuture.m */; };
+		C8C88DAD181A022400E71BCE /* XMMMPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C8C88DAC181A022400E71BCE /* XMMMPromiseTests.m */; };
+		C8C88DAF181A023500E71BCE /* XMMMConcreteFutureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C8C88DAE181A023500E71BCE /* XMMMConcreteFutureTests.m */; };
+		C8C88DB1181A024500E71BCE /* XMMMMappedFutureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C8C88DB0181A024500E71BCE /* XMMMMappedFutureTests.m */; };
+		C8C88DB4181A029F00E71BCE /* XMMMAsyncTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = C8C88DB3181A029F00E71BCE /* XMMMAsyncTestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,11 @@
 		C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFuture.m; sourceTree = "<group>"; };
 		C88D2EFF1816D26000C23521 /* XMMMMappedFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMMappedFuture.h; sourceTree = "<group>"; };
 		C88D2F001816D26000C23521 /* XMMMMappedFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMMappedFuture.m; sourceTree = "<group>"; };
+		C8C88DAC181A022400E71BCE /* XMMMPromiseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMPromiseTests.m; sourceTree = "<group>"; };
+		C8C88DAE181A023500E71BCE /* XMMMConcreteFutureTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFutureTests.m; sourceTree = "<group>"; };
+		C8C88DB0181A024500E71BCE /* XMMMMappedFutureTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMMappedFutureTests.m; sourceTree = "<group>"; };
+		C8C88DB2181A029F00E71BCE /* XMMMAsyncTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMAsyncTestCase.h; sourceTree = "<group>"; };
+		C8C88DB3181A029F00E71BCE /* XMMMAsyncTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMAsyncTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +153,11 @@
 			isa = PBXGroup;
 			children = (
 				C88D2EEF1816C09F00C23521 /* XMMMFutureTests.m */,
+				C8C88DAC181A022400E71BCE /* XMMMPromiseTests.m */,
+				C8C88DAE181A023500E71BCE /* XMMMConcreteFutureTests.m */,
+				C8C88DB0181A024500E71BCE /* XMMMMappedFutureTests.m */,
+				C8C88DB2181A029F00E71BCE /* XMMMAsyncTestCase.h */,
+				C8C88DB3181A029F00E71BCE /* XMMMAsyncTestCase.m */,
 				C88D2EEA1816C09F00C23521 /* Supporting Files */,
 			);
 			path = XMMMFutureTests;
@@ -250,7 +264,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8C88DAD181A022400E71BCE /* XMMMPromiseTests.m in Sources */,
+				C8C88DAF181A023500E71BCE /* XMMMConcreteFutureTests.m in Sources */,
+				C8C88DB1181A024500E71BCE /* XMMMMappedFutureTests.m in Sources */,
 				C88D2EF01816C09F00C23521 /* XMMMFutureTests.m in Sources */,
+				C8C88DB4181A029F00E71BCE /* XMMMAsyncTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +445,7 @@
 				C88D2EF51816C09F00C23521 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C88D2EF61816C09F00C23521 /* Build configuration list for PBXNativeTarget "XMMMFutureTests" */ = {
 			isa = XCConfigurationList;
@@ -435,6 +454,7 @@
 				C88D2EF81816C09F00C23521 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
