@@ -7,7 +7,13 @@
 //
 
 #import "XMMMFuture.h"
+#import "XMMMConcreteFuture.h"
 
 @implementation XMMMFuture
+
++ (instancetype)futureWithPromiseBlock:(XMMMFuturePromiseBlock)block
+{
+    return [[XMMMConcreteFuture alloc] initWithPromiseBlock:block];
+}
 
 @end

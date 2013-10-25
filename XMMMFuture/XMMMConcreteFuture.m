@@ -48,6 +48,15 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return self;
 }
 
+- (instancetype)initWithPromiseBlock:(XMMMFuturePromiseBlock)block
+{
+    self = [self init];
+    if (self) {
+        block(self);
+    }
+    return self;
+}
+
 #pragma mark - Public methods (Future handlers)
 
 - (void)addSuccessObserverWithBlock:(XMMMFutureSuccessBlock)block

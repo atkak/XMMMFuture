@@ -33,11 +33,11 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         XCTFail(@"timed out.");
-        self.completed = YES;
+        [self finishTest];
     });
     
     do {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     } while (!self.completed);
     
     [super tearDown];
@@ -45,7 +45,7 @@
 
 #pragma mark - Test methods
 
-- (void)testCreation
+- (void)testCreationByPromise
 {
     XMMMPromise *promise = [XMMMPromise defaultPromise];
     
@@ -55,7 +55,18 @@
     
     XCTAssertNotNil(future, @"Future should not be nil.");
     
-    self.completed = YES;
+    [self finishTest];
+}
+
+- (void)testCreationByFuture
+{
+    XMMMFuture *future = [XMMMFuture futureWithPromiseBlock:^(XMMMPromise *promise) {
+        XCTAssertNotNil(promise, @"Promise should not be nil.");
+    }];
+    
+    XCTAssertNotNil(future, @"Future should not be nil.");
+    
+    [self finishTest];
 }
 
 - (void)testResolve
@@ -70,12 +81,33 @@
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [future addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
-        self.completed = YES;
+        [self finishTest];
+    }];
+}
+
+- (void)testResolveFuture
+{
+    NSObject *obj1 = [NSObject new];
+    
+    XMMMFuture *future = [XMMMFuture futureWithPromiseBlock:^(XMMMPromise *promise) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [promise resolveWithObject:obj1];
+        });
+    }];
+    
+    [future addSuccessObserverWithBlock:^(id result) {
+        XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
+        [self finishTest];
+    }];
+    
+    [future addFailureObserverWithBlock:^(NSError *error) {
+        XCTFail(@"Failure block should not be called.");
+        [self finishTest];
     }];
 }
 
@@ -89,12 +121,31 @@
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [future addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
-        self.completed = YES;
+        [self finishTest];
+    }];
+}
+
+- (void)testResolveFutureAlreadyResolved
+{
+    NSObject *obj1 = [NSObject new];
+    
+    XMMMFuture *future = [XMMMFuture futureWithPromiseBlock:^(XMMMPromise *promise) {
+        [promise resolveWithObject:obj1];
+    }];
+    
+    [future addSuccessObserverWithBlock:^(id result) {
+        XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
+        [self finishTest];
+    }];
+    
+    [future addFailureObserverWithBlock:^(NSError *error) {
+        XCTFail(@"Failure block should not be called.");
+        [self finishTest];
     }];
 }
 
@@ -110,12 +161,12 @@
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"Success block should not be called.");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [future addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -129,12 +180,12 @@
     
     [future addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"Success block should not be called.");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [future addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -152,7 +203,7 @@
     NSString *str1 = @"Hello";
     dispatch_async(dispatch_get_main_queue(), ^{
         [promise resolveWithObject:str1];
-        self.completed = YES;
+        [self finishTest];
     });
     
     [future2 addSuccessObserverWithBlock:^(id result) {
@@ -179,7 +230,7 @@
     NSError *error1 = [self error];
     dispatch_async(dispatch_get_main_queue(), ^{
         [promise rejectWithError:error1];
-        self.completed = YES;
+        [self finishTest];
     });
     
     [future2 addSuccessObserverWithBlock:^(id result) {
@@ -216,12 +267,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -244,12 +295,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqualObjects(error, error1, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -280,12 +331,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqualObjects(error, error1, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -309,12 +360,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -337,12 +388,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -373,12 +424,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -402,12 +453,12 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTAssertEqual(result, obj1, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
@@ -438,16 +489,21 @@
     
     [composedFuture addSuccessObserverWithBlock:^(id result) {
         XCTFail(@"");
-        self.completed = YES;
+        [self finishTest];
     }];
     
     [composedFuture addFailureObserverWithBlock:^(NSError *error) {
         XCTAssertEqual(error, error2, @"");
-        self.completed = YES;
+        [self finishTest];
     }];
 }
 
 #pragma mark - Helper methods
+
+- (void)finishTest
+{
+    self.completed = YES;
+}
 
 - (NSError *)error
 {
