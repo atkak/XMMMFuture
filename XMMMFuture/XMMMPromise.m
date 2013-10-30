@@ -9,16 +9,46 @@
 #import "XMMMPromise.h"
 #import "XMMMConcreteFuture.h"
 
+@interface XMMMPromise ()
+
+@property (nonatomic) XMMMConcreteFuture *internalFuture;
+
+@end
+
 @implementation XMMMPromise
 
 + (instancetype)defaultPromise
 {
-    return (XMMMPromise *)[XMMMConcreteFuture new];
+    return [[self alloc] initWithFuture:[XMMMConcreteFuture new]];
+}
+
+- (instancetype)initWithFuture:(XMMMConcreteFuture *)future
+{
+    self = [super init];
+    if (self) {
+        _internalFuture = future;
+    }
+    return self;
 }
 
 - (XMMMFuture *)future
 {
-    return self;
+    return self.internalFuture;
+}
+
+- (BOOL)completed
+{
+    return self.internalFuture.completed;
+}
+
+- (void)resolveWithObject:(id)result
+{
+    [self.internalFuture resolveWithObject:result];
+}
+
+- (void)rejectWithError:(NSError *)error
+{
+    [self.internalFuture rejectWithError:error];
 }
 
 @end

@@ -23,11 +23,8 @@ typedef void (^XMMMFuturePromiseBlock)(XMMMPromise *promise);
 
 @property (nonatomic, readonly) BOOL completed;
 
-+ (instancetype)futureWithPromiseBlock:(XMMMFuturePromiseBlock)block;
-- (instancetype)initWithPromiseBlock:(XMMMFuturePromiseBlock)block;
-
-- (void)addSuccessObserverWithBlock:(XMMMFutureSuccessBlock)block;
-- (void)addFailureObserverWithBlock:(XMMMFutureFailureBlock)block;
+- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block;
+- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block;
 
 - (XMMMFuture *)map:(XMMMFutureMapBlock)block;
 - (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block;
@@ -35,3 +32,5 @@ typedef void (^XMMMFuturePromiseBlock)(XMMMPromise *promise);
 - (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block;
 
 @end
+
+XMMMFuture *XMMMCreateFutureWithPromiseBlock(XMMMFuturePromiseBlock block);

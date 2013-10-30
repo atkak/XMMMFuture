@@ -8,6 +8,7 @@
 
 #import "XMMMConcreteFuture.h"
 #import "XMMMMappedFuture.h"
+#import "XMMMPromise.h"
 
 typedef NS_ENUM(NSInteger, XMMMFutureState) {
     XMMMFutureStateIncomplete,
@@ -48,18 +49,9 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return self;
 }
 
-- (instancetype)initWithPromiseBlock:(XMMMFuturePromiseBlock)block
-{
-    self = [self init];
-    if (self) {
-        block(self);
-    }
-    return self;
-}
-
 #pragma mark - Public methods (Future handlers)
 
-- (void)addSuccessObserverWithBlock:(XMMMFutureSuccessBlock)block
+- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block
 {
     @synchronized(self) {
         if (self.state == XMMMFutureStateIncomplete) {
@@ -74,7 +66,7 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
 }
 
-- (void)addFailureObserverWithBlock:(XMMMFutureFailureBlock)block
+- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block
 {
     @synchronized(self) {
         if (self.state == XMMMFutureStateIncomplete) {
@@ -117,7 +109,9 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 {
     @synchronized(self) {
         if (self.state != XMMMFutureStateIncomplete) {
-            return;
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"Future is already resolved or rejected."
+                                         userInfo:nil];
         }
         
         if (self.successBlock) {
@@ -140,7 +134,9 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     
     @synchronized(self) {
         if (self.state != XMMMFutureStateIncomplete) {
-            return;
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"Future is already resolved or rejected."
+                                         userInfo:nil];
         }
         
         if (self.failureBlock) {

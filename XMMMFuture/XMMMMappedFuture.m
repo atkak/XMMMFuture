@@ -42,12 +42,12 @@
     if (self) {
         _originalFuture = future;
         
-        [future addSuccessObserverWithBlock:^(id result) {
+        [future setSuccessHandlerWithBlock:^(id result) {
             id newResult = block(result);
             [self resolveWithObject:newResult];
         }];
         
-        [future addFailureObserverWithBlock:^(NSError *error) {
+        [future setFailureHandlerWithBlock:^(NSError *error) {
             [self rejectWithError:error];
         }];
     }
@@ -60,19 +60,19 @@
     if (self) {
         _originalFuture = future;
         
-        [future addSuccessObserverWithBlock:^(id result) {
+        [future setSuccessHandlerWithBlock:^(id result) {
             XMMMFuture *newFuture = block(result);
             
-            [newFuture addSuccessObserverWithBlock:^(id result) {
+            [newFuture setSuccessHandlerWithBlock:^(id result) {
                 [self resolveWithObject:result];
             }];
             
-            [newFuture addFailureObserverWithBlock:^(NSError *error) {
+            [newFuture setFailureHandlerWithBlock:^(NSError *error) {
                 [self rejectWithError:error];
             }];
         }];
         
-        [future addFailureObserverWithBlock:^(NSError *error) {
+        [future setFailureHandlerWithBlock:^(NSError *error) {
             [self rejectWithError:error];
         }];
     }
@@ -85,11 +85,11 @@
     if (self) {
         _originalFuture = future;
         
-        [future addSuccessObserverWithBlock:^(id result) {
+        [future setSuccessHandlerWithBlock:^(id result) {
             [self resolveWithObject:result];
         }];
         
-        [future addFailureObserverWithBlock:^(NSError *error) {
+        [future setFailureHandlerWithBlock:^(NSError *error) {
             id newResult = block(error);
             
             if ([newResult isKindOfClass:[NSError class]]) {
@@ -109,18 +109,18 @@
     if (self) {
         _originalFuture = future;
         
-        [future addSuccessObserverWithBlock:^(id result) {
+        [future setSuccessHandlerWithBlock:^(id result) {
             [self resolveWithObject:result];
         }];
         
-        [future addFailureObserverWithBlock:^(NSError *error) {
+        [future setFailureHandlerWithBlock:^(NSError *error) {
             XMMMFuture *newFuture = block(error);
             
-            [newFuture addSuccessObserverWithBlock:^(id result) {
+            [newFuture setSuccessHandlerWithBlock:^(id result) {
                 [self resolveWithObject:result];
             }];
             
-            [newFuture addFailureObserverWithBlock:^(NSError *error) {
+            [newFuture setFailureHandlerWithBlock:^(NSError *error) {
                 [self rejectWithError:error];
             }];
         }];

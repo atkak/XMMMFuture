@@ -34,9 +34,9 @@
 
 - (void)testCreation
 {
-    XMMMFuture *future = [XMMMFuture futureWithPromiseBlock:^(XMMMPromise *promise) {
+    XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
         XCTAssertNotNil(promise, @"Promise should not be nil.");
-    }];
+    });
     
     XCTAssertNotNil(future, @"Future should not be nil.");
 }

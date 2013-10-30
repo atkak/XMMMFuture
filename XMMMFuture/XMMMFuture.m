@@ -7,13 +7,60 @@
 //
 
 #import "XMMMFuture.h"
-#import "XMMMConcreteFuture.h"
+#import "XMMMPromise.h"
 
 @implementation XMMMFuture
 
-+ (instancetype)futureWithPromiseBlock:(XMMMFuturePromiseBlock)block
+- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block
 {
-    return [[XMMMConcreteFuture alloc] initWithPromiseBlock:block];
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (XMMMFuture *)map:(XMMMFutureMapBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
 }
 
 @end
+
+XMMMFuture *XMMMCreateFutureWithPromiseBlock(XMMMFuturePromiseBlock block)
+{
+    XMMMPromise *promise = [XMMMPromise defaultPromise];
+    XMMMFuture *future = promise.future;
+    
+    block(promise);
+    
+    return future;
+}

@@ -6,8 +6,11 @@
 //  Copyright (c) 2013年 KAKEGAWA Atsushi. All rights reserved.
 //
 
-#import "XMMMPromise.h"
+#import "XMMMFuture.h"
 
-@interface XMMMConcreteFuture : XMMMPromise
+@interface XMMMConcreteFuture : XMMMFuture
+
+- (void)resolveWithObject:(id)result;
+- (void)rejectWithError:(NSError *)error;
 
 @end

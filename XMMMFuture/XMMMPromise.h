@@ -8,9 +8,10 @@
 
 #import "XMMMFuture.h"
 
-@interface XMMMPromise : XMMMFuture
+@interface XMMMPromise : NSObject
 
 @property (nonatomic, readonly) XMMMFuture *future;
+@property (nonatomic, readonly) BOOL completed;
 
 + (instancetype)defaultPromise;
 
