@@ -49,24 +49,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C8803B1E182109C700046479 /* XMMMFutureHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMMMFutureHeader.h; path = Classes/XMMMFutureHeader.h; sourceTree = "<group>"; };
+		C8803B1E182109C700046479 /* XMMMFutureHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMFutureHeader.h; sourceTree = "<group>"; };
 		C88D2ED01816C09F00C23521 /* libXMMMFuture.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXMMMFuture.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C88D2ED31816C09F00C23521 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C88D2ED71816C09F00C23521 /* XMMMFuture-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XMMMFuture-Prefix.pch"; sourceTree = "<group>"; };
-		C88D2ED81816C09F00C23521 /* XMMMFuture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XMMMFuture.h; path = Classes/XMMMFuture.h; sourceTree = "<group>"; };
-		C88D2EDA1816C09F00C23521 /* XMMMFuture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XMMMFuture.m; path = Classes/XMMMFuture.m; sourceTree = "<group>"; };
+		C88D2ED81816C09F00C23521 /* XMMMFuture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMMMFuture.h; sourceTree = "<group>"; };
+		C88D2EDA1816C09F00C23521 /* XMMMFuture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XMMMFuture.m; sourceTree = "<group>"; };
 		C88D2EE01816C09F00C23521 /* XMMMFutureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XMMMFutureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C88D2EE11816C09F00C23521 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C88D2EE41816C09F00C23521 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C88D2EEB1816C09F00C23521 /* XMMMFutureTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XMMMFutureTests-Info.plist"; sourceTree = "<group>"; };
 		C88D2EED1816C09F00C23521 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C88D2EEF1816C09F00C23521 /* XMMMFutureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XMMMFutureTests.m; sourceTree = "<group>"; };
-		C88D2EF91816C0B400C23521 /* XMMMPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMMMPromise.h; path = Classes/XMMMPromise.h; sourceTree = "<group>"; };
-		C88D2EFA1816C0B400C23521 /* XMMMPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMMMPromise.m; path = Classes/XMMMPromise.m; sourceTree = "<group>"; };
-		C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMMMConcreteFuture.h; path = Classes/XMMMConcreteFuture.h; sourceTree = "<group>"; };
-		C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMMMConcreteFuture.m; path = Classes/XMMMConcreteFuture.m; sourceTree = "<group>"; };
-		C88D2EFF1816D26000C23521 /* XMMMMappedFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMMMMappedFuture.h; path = Classes/XMMMMappedFuture.h; sourceTree = "<group>"; };
-		C88D2F001816D26000C23521 /* XMMMMappedFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMMMMappedFuture.m; path = Classes/XMMMMappedFuture.m; sourceTree = "<group>"; };
+		C88D2EF91816C0B400C23521 /* XMMMPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMPromise.h; sourceTree = "<group>"; };
+		C88D2EFA1816C0B400C23521 /* XMMMPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMPromise.m; sourceTree = "<group>"; };
+		C88D2EFC1816C0C900C23521 /* XMMMConcreteFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMConcreteFuture.h; sourceTree = "<group>"; };
+		C88D2EFD1816C0C900C23521 /* XMMMConcreteFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFuture.m; sourceTree = "<group>"; };
+		C88D2EFF1816D26000C23521 /* XMMMMappedFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMMMMappedFuture.h; sourceTree = "<group>"; };
+		C88D2F001816D26000C23521 /* XMMMMappedFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMMappedFuture.m; sourceTree = "<group>"; };
 		C8C88DAC181A022400E71BCE /* XMMMPromiseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMPromiseTests.m; sourceTree = "<group>"; };
 		C8C88DAE181A023500E71BCE /* XMMMConcreteFutureTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMConcreteFutureTests.m; sourceTree = "<group>"; };
 		C8C88DB0181A024500E71BCE /* XMMMMappedFutureTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMMMMappedFutureTests.m; sourceTree = "<group>"; };
