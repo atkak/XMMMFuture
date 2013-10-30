@@ -58,16 +58,14 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 - (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block queue:(dispatch_queue_t)queue
 {
-    @synchronized(self) {
-        if (self.state == XMMMFutureStateIncomplete) {
-            self.successBlock = block;
-        } else if (self.state == XMMMFutureStateSucceeded) {
-            self.state = XMMMFutureStateFinished;
-            
-            dispatch_async(queue, ^{
-                block(self.result);
-            });
-        }
+    if (self.state == XMMMFutureStateIncomplete) {
+        self.successBlock = block;
+    } else if (self.state == XMMMFutureStateSucceeded) {
+        self.state = XMMMFutureStateFinished;
+        
+        dispatch_async(queue, ^{
+            block(self.result);
+        });
     }
 }
 
@@ -78,16 +76,14 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 - (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block queue:(dispatch_queue_t)queue
 {
-    @synchronized(self) {
-        if (self.state == XMMMFutureStateIncomplete) {
-            self.failureBlock = block;
-        } else if (self.state == XMMMFutureStateFailed) {
-            self.state = XMMMFutureStateFinished;
-            
-            dispatch_async(queue, ^{
-                block(self.error);
-            });
-        }
+    if (self.state == XMMMFutureStateIncomplete) {
+        self.failureBlock = block;
+    } else if (self.state == XMMMFutureStateFailed) {
+        self.state = XMMMFutureStateFinished;
+        
+        dispatch_async(queue, ^{
+            block(self.error);
+        });
     }
 }
 
@@ -117,20 +113,18 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 - (void)resolveWithObject:(id)result
 {
-    @synchronized(self) {
-        if (self.state != XMMMFutureStateIncomplete) {
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                           reason:@"Future is already resolved or rejected."
-                                         userInfo:nil];
-        }
-        
-        if (self.successBlock) {
-            self.successBlock(result);
-            self.state = XMMMFutureStateFinished;
-        } else {
-            self.state = XMMMFutureStateSucceeded;
-            self.result = result;
-        }
+    if (self.state != XMMMFutureStateIncomplete) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Future is already resolved or rejected."
+                                     userInfo:nil];
+    }
+    
+    if (self.successBlock) {
+        self.successBlock(result);
+        self.state = XMMMFutureStateFinished;
+    } else {
+        self.state = XMMMFutureStateSucceeded;
+        self.result = result;
     }
 }
 
@@ -142,20 +136,18 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
                                      userInfo:nil];
     }
     
-    @synchronized(self) {
-        if (self.state != XMMMFutureStateIncomplete) {
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                           reason:@"Future is already resolved or rejected."
-                                         userInfo:nil];
-        }
-        
-        if (self.failureBlock) {
-            self.failureBlock(error);
-            self.state = XMMMFutureStateFinished;
-        } else {
-            self.state = XMMMFutureStateFailed;
-            self.error = error;
-        }
+    if (self.state != XMMMFutureStateIncomplete) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Future is already resolved or rejected."
+                                     userInfo:nil];
+    }
+    
+    if (self.failureBlock) {
+        self.failureBlock(error);
+        self.state = XMMMFutureStateFinished;
+    } else {
+        self.state = XMMMFutureStateFailed;
+        self.error = error;
     }
 }
 
