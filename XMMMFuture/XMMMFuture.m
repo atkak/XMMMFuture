@@ -18,7 +18,21 @@
                                  userInfo:nil];
 }
 
+- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block queue:(dispatch_queue_t)queue
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
 - (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block queue:(dispatch_queue_t)queue
 {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]

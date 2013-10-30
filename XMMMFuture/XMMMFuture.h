@@ -24,7 +24,9 @@ typedef void (^XMMMFuturePromiseBlock)(XMMMPromise *promise);
 @property (nonatomic, readonly) BOOL completed;
 
 - (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block;
+- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block queue:(dispatch_queue_t)queue;
 - (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block;
+- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block queue:(dispatch_queue_t)queue;
 
 - (XMMMFuture *)map:(XMMMFutureMapBlock)block;
 - (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block;
