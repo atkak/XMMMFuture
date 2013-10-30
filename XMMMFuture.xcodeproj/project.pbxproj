@@ -49,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C8803B1E182109C700046479 /* XMMMFutureHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMMMFutureHeader.h; path = Classes/XMMMFutureHeader.h; sourceTree = "<group>"; };
 		C88D2ED01816C09F00C23521 /* libXMMMFuture.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXMMMFuture.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C88D2ED31816C09F00C23521 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C88D2ED71816C09F00C23521 /* XMMMFuture-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XMMMFuture-Prefix.pch"; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				C88D2F001816D26000C23521 /* XMMMMappedFuture.m */,
 				C88D2EF91816C0B400C23521 /* XMMMPromise.h */,
 				C88D2EFA1816C0B400C23521 /* XMMMPromise.m */,
+				C8803B1E182109C700046479 /* XMMMFutureHeader.h */,
 				C88D2ED61816C09F00C23521 /* Supporting Files */,
 			);
 			path = XMMMFuture;

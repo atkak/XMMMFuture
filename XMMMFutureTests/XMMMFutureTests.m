@@ -7,8 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "XMMMFuture.h"
-#import "XMMMPromise.h"
+#import "XMMMFutureHeader.h"
 
 @interface XMMMFutureTests : XCTestCase
 

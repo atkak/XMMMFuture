@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "XMMMAsyncTestCase.h"
-#import "XMMMPromise.h"
+#import "XMMMFutureHeader.h"
 
 @interface XMMMConcreteFutureTests : XMMMAsyncTestCase
 
