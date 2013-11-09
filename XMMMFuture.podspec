@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
   s.source_files = 'XMMMFuture', 'XMMMFuture/**/*.{h,m}'
-  s.public_header_files = 'XMMMFuture/XMMMFutureHeader.h'
+  s.public_header_files = 'XMMMFuture/XMMMFutureHeader.h', 'XMMMFuture/XMMMFuture.h', 'XMMMFuture/XMMMPromise.h'
   s.requires_arc = true
 end
