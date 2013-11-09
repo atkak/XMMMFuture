@@ -43,13 +43,11 @@
         [promise resolveWithObject:obj1];
     });
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -64,13 +62,11 @@
         });
     });
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -83,13 +79,11 @@
     NSObject *obj1 = [NSObject new];
     [promise resolveWithObject:obj1];
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -102,13 +96,11 @@
         [promise resolveWithObject:obj1];
     });
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTAssertEqual(result, obj1, @"Result object should be same as resolved one.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"Failure block should not be called.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -123,13 +115,11 @@
         [promise rejectWithError:error1];
     });
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTFail(@"Success block should not be called.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -142,13 +132,11 @@
     NSError *error1 = [self error];
     [promise rejectWithError:error1];
     
-    [future setSuccessHandlerWithBlock:^(id result) {
+    [future success:^(id result) {
         XCTFail(@"Success block should not be called.");
-        [self finishTest];
-    }];
-    
-    [future setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqual(error, error1, @"Error object should be same as rejected one.");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -156,13 +144,13 @@
 - (void)testMap
 {
     XMMMPromise *promise = [XMMMPromise defaultPromise];
-    XMMMFuture *future1 = promise.future;
+    XMMMFuture *future = promise.future;
     
-    XMMMFuture *future2 = [future1 map:^id(id result) {
+    XMMMFuture *mappedFuture = [future map:^id(id result) {
         return [result stringByAppendingString:@", world!"];
     }];
     
-    XCTAssertNotNil(future2, @"Mapped Future should not be nil.");
+    XCTAssertNotNil(mappedFuture, @"Mapped Future should not be nil.");
     
     NSString *str1 = @"Hello";
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -170,26 +158,26 @@
         [self finishTest];
     });
     
-    [future2 setSuccessHandlerWithBlock:^(id result) {
+    [mappedFuture success:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
-    }];
-    
-    [future2 setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
+        [self finishTest];
     }];
 }
 
 - (void)testMapFailed
 {
     XMMMPromise *promise = [XMMMPromise defaultPromise];
-    XMMMFuture *future1 = promise.future;
+    XMMMFuture *future = promise.future;
     
-    XMMMFuture *future2 = [future1 map:^id(id result) {
+    XMMMFuture *mappedFuture = [future map:^id(id result) {
         XCTFail(@"");
         return nil;
     }];
     
-    XCTAssertNotNil(future2, @"Mapped Future should not be nil.");
+    XCTAssertNotNil(mappedFuture, @"Mapped Future should not be nil.");
     
     NSError *error1 = [self error];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -197,12 +185,12 @@
         [self finishTest];
     });
     
-    [future2 setSuccessHandlerWithBlock:^(id result) {
+    [mappedFuture success:^(id result) {
         XCTFail(@"");
-    }];
-    
-    [future2 setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqual(error, error1, @"");
+    } completed:^{
+        [self finishTest];
     }];
 }
 
@@ -229,13 +217,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTAssertEqualObjects(result, @"Hello, world!", @"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -257,13 +243,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTFail(@"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqualObjects(error, error1, @"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -293,13 +277,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTFail(@"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqualObjects(error, error1, @"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -322,13 +304,11 @@
     
     XCTAssertNotNil(composedFuture, @"Mapped Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTAssertEqual(result, obj, @"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -350,13 +330,11 @@
     
     XCTAssertNotNil(composedFuture, @"Mapped Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTAssertEqual(result, obj, @"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -386,13 +364,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTAssertEqual(result, obj1, @"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -415,13 +391,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTAssertEqual(result, obj1, @"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTFail(@"");
+    } completed:^{
         [self finishTest];
     }];
 }
@@ -451,13 +425,11 @@
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
     
-    [composedFuture setSuccessHandlerWithBlock:^(id result) {
+    [composedFuture success:^(id result) {
         XCTFail(@"");
-        [self finishTest];
-    }];
-    
-    [composedFuture setFailureHandlerWithBlock:^(NSError *error) {
+    } failure:^(NSError *error) {
         XCTAssertEqual(error, error2, @"");
+    } completed:^{
         [self finishTest];
     }];
 }

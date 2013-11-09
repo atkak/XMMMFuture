@@ -42,14 +42,12 @@
     if (self) {
         _originalFuture = future;
         
-        [future setSuccessHandlerWithBlock:^(id result) {
+        [future success:^(id result) {
             id newResult = block(result);
             [self resolveWithObject:newResult];
-        }];
-        
-        [future setFailureHandlerWithBlock:^(NSError *error) {
+        } failure:^(NSError *error) {
             [self rejectWithError:error];
-        }];
+        } completed:nil];
     }
     return self;
 }
@@ -60,21 +58,17 @@
     if (self) {
         _originalFuture = future;
         
-        [future setSuccessHandlerWithBlock:^(id result) {
+        [future success:^(id result) {
             XMMMFuture *newFuture = block(result);
             
-            [newFuture setSuccessHandlerWithBlock:^(id result) {
+            [newFuture success:^(id result) {
                 [self resolveWithObject:result];
-            }];
-            
-            [newFuture setFailureHandlerWithBlock:^(NSError *error) {
+            } failure:^(NSError *error) {
                 [self rejectWithError:error];
-            }];
-        }];
-        
-        [future setFailureHandlerWithBlock:^(NSError *error) {
+            } completed:nil];
+        } failure:^(NSError *error) {
             [self rejectWithError:error];
-        }];
+        } completed:nil];
     }
     return self;
 }
@@ -85,11 +79,9 @@
     if (self) {
         _originalFuture = future;
         
-        [future setSuccessHandlerWithBlock:^(id result) {
+        [future success:^(id result) {
             [self resolveWithObject:result];
-        }];
-        
-        [future setFailureHandlerWithBlock:^(NSError *error) {
+        } failure:^(NSError *error) {
             id newResult = block(error);
             
             if ([newResult isKindOfClass:[NSError class]]) {
@@ -98,7 +90,7 @@
             } else {
                 [self resolveWithObject:newResult];
             }
-        }];
+        } completed:nil];
     }
     return self;
 }
@@ -109,21 +101,17 @@
     if (self) {
         _originalFuture = future;
         
-        [future setSuccessHandlerWithBlock:^(id result) {
+        [future success:^(id result) {
             [self resolveWithObject:result];
-        }];
-        
-        [future setFailureHandlerWithBlock:^(NSError *error) {
+        } failure:^(NSError *error) {
             XMMMFuture *newFuture = block(error);
             
-            [newFuture setSuccessHandlerWithBlock:^(id result) {
+            [newFuture success:^(id result) {
                 [self resolveWithObject:result];
-            }];
-            
-            [newFuture setFailureHandlerWithBlock:^(NSError *error) {
+            } failure:^(NSError *error) {
                 [self rejectWithError:error];
-            }];
-        }];
+            } completed:nil];
+        } completed:nil];
     }
     return self;
 }

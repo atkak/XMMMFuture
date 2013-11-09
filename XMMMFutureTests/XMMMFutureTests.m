@@ -40,4 +40,9 @@
     XCTAssertNotNil(future, @"Future should not be nil.");
 }
 
+- (void)testCreationWithNil
+{
+    XCTAssertThrows(XMMMCreateFutureWithPromiseBlock(nil), @"Creating Future with nil blocks should raise Exception.");
+}
+
 @end

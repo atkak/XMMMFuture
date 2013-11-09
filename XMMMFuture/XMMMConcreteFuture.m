@@ -24,6 +24,8 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 @property (nonatomic) NSError *error;
 @property (nonatomic, copy) XMMMFutureSuccessBlock successBlock;
 @property (nonatomic, copy) XMMMFutureFailureBlock failureBlock;
+@property (nonatomic, copy) XMMMFutureCompleteBlock completeBlock;
+@property (nonatomic) dispatch_queue_t executeQueue;
 
 @end
 
@@ -51,38 +53,39 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 
 #pragma mark - Public methods (Future handlers)
 
-- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block
+- (void)success:(XMMMFutureSuccessBlock)successBlock
+        failure:(XMMMFutureFailureBlock)failureBlock
+      completed:(XMMMFutureCompleteBlock)completeBlock
 {
-    [self setSuccessHandlerWithBlock:block queue:dispatch_get_main_queue()];
+    [self success:successBlock
+          failure:failureBlock
+        completed:completeBlock
+            queue:dispatch_get_main_queue()];
 }
 
-- (void)setSuccessHandlerWithBlock:(XMMMFutureSuccessBlock)block queue:(dispatch_queue_t)queue
+- (void)success:(XMMMFutureSuccessBlock)successBlock
+        failure:(XMMMFutureFailureBlock)failureBlock
+      completed:(XMMMFutureCompleteBlock)completeBlock
+          queue:(dispatch_queue_t)queue
 {
     if (self.state == XMMMFutureStateIncomplete) {
-        self.successBlock = block;
+        self.successBlock = successBlock;
+        self.failureBlock = failureBlock;
+        self.completeBlock = completeBlock;
+        self.executeQueue = queue;
     } else if (self.state == XMMMFutureStateSucceeded) {
         self.state = XMMMFutureStateFinished;
         
         dispatch_async(queue, ^{
-            block(self.result);
+            successBlock(self.result);
+            completeBlock();
         });
-    }
-}
-
-- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block
-{
-    [self setFailureHandlerWithBlock:block queue:dispatch_get_main_queue()];
-}
-
-- (void)setFailureHandlerWithBlock:(XMMMFutureFailureBlock)block queue:(dispatch_queue_t)queue
-{
-    if (self.state == XMMMFutureStateIncomplete) {
-        self.failureBlock = block;
     } else if (self.state == XMMMFutureStateFailed) {
         self.state = XMMMFutureStateFinished;
         
         dispatch_async(queue, ^{
-            block(self.error);
+            failureBlock(self.error);
+            completeBlock();
         });
     }
 }
@@ -120,7 +123,18 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
     
     if (self.successBlock) {
-        self.successBlock(result);
+        dispatch_queue_t queue = self.executeQueue;
+        if (!queue) {
+            queue = dispatch_get_main_queue();
+        }
+        
+        dispatch_async(queue, ^{
+            self.successBlock(result);
+            if (self.completeBlock) {
+                self.completeBlock();
+            }
+        });
+        
         self.state = XMMMFutureStateFinished;
     } else {
         self.state = XMMMFutureStateSucceeded;
@@ -143,7 +157,18 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     }
     
     if (self.failureBlock) {
-        self.failureBlock(error);
+        dispatch_queue_t queue = self.executeQueue;
+        if (!queue) {
+            queue = dispatch_get_main_queue();
+        }
+        
+        dispatch_async(queue, ^{
+            self.failureBlock(error);
+            if (self.completeBlock) {
+                self.completeBlock();
+            }
+        });
+        
         self.state = XMMMFutureStateFinished;
     } else {
         self.state = XMMMFutureStateFailed;
