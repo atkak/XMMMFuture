@@ -4,13 +4,13 @@ XMMMFuture is the Objective-C implementation of Future-Promise pattern. Future e
 ##Installation with CocoaPods
 Add XMMMFuture to your Podfile.
 
-```
+``` objective-c
 pod 'XMMMFuture'
 ```
 
 Run CocoaPods.
 
-```
+``` objective-c
 $ pod install
 ```
 
@@ -24,7 +24,7 @@ $ pod install
 
 `XMMMCreateFutureWithPromiseBlock` function creates Future object.
 
-```
+``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     // async process
 });
@@ -32,14 +32,14 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
 
 You can also retrieve Future by creating Promise which owns Future. 
 
-```
+``` objective-c
 XMMMPromise *promise = [XMMMPromise defaultPromise];
 XMMMFuture *future = promise.future;
 ```
 
 ###Handle results of the calculation
 
-```
+``` objective-c
 [future success:^(id result) {
     // When calculation succeeds, this block is called.
 } failure:^(NSError *error) {
@@ -52,7 +52,7 @@ XMMMFuture *future = promise.future;
 ###Complete the calculation 
 XMMMPromise has a method `resolveWithObject:' and it lets a calculation success.
 
-```
+``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -69,7 +69,7 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
 
 XMMMPromise also has a method `rejectWithError:' and it lets a calculation failure.
 
-```
+``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -86,7 +86,7 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
 
 ###Map the result
 
-```
+``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [promise resolveWithObject:@"Hello"];
@@ -104,7 +104,7 @@ XMMMFuture *mappedFuture = [future map:^id(id result) {
 
 ###Map the result to asynchronous calculation
 
-```
+``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [promise resolveWithObject:@"Hello"];
