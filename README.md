@@ -4,13 +4,13 @@ XMMMFuture is the Objective-C implementation of Future-Promise pattern. Future e
 ##Installation with CocoaPods
 Add XMMMFuture to your Podfile.
 
-``` objective-c
+```
 pod 'XMMMFuture'
 ```
 
 Run CocoaPods.
 
-``` objective-c
+```
 $ pod install
 ```
 
