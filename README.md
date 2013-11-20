@@ -111,15 +111,10 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
     });
 });
 
-XMMMFuture *composedFuture = [future flatMap:^XMMMFuture *(id result) {
-    XMMMPromise *innerPromise = [XMMMPromise defaultPromise];
-    XMMMFuture *innerFuture = innerPromise.future;
-    
+XMMMFuture *composedFuture = [future mapWithPromise:^void (id result, XMMMPromise *promise) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [innerPromise resolveWithObject:[result stringByAppendingString:@", world!"]];
+        [promise resolveWithObject:[result stringByAppendingString:@", world!"]];
     });
-    
-    return innerFuture;
 }];
 
 [composedFuture success:^(id result) {
