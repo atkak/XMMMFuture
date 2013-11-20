@@ -204,15 +204,10 @@
         [promise1 resolveWithObject:str1];
     });
     
-    XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
-        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
-        XMMMFuture *future2 = promise2.future;
-        
+    XMMMFuture *composedFuture = [future1 mapWithPromise:^void (id result, XMMMPromise *promise) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 resolveWithObject:[result stringByAppendingString:@", world!"]];
+            [promise resolveWithObject:[result stringByAppendingString:@", world!"]];
         });
-        
-        return future2;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
@@ -236,9 +231,8 @@
         [promise1 rejectWithError:error1];
     });
     
-    XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
+    XMMMFuture *composedFuture = [future1 mapWithPromise:^void (id result, XMMMPromise *promise) {
         XCTFail(@"");
-        return nil;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
@@ -264,15 +258,10 @@
     
     NSError *error1 = [self error];
     
-    XMMMFuture *composedFuture = [future1 flatMap:^XMMMFuture *(id result) {
-        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
-        XMMMFuture *future2 = promise2.future;
-        
+    XMMMFuture *composedFuture = [future1 mapWithPromise:^void (id result, XMMMPromise *promise) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 rejectWithError:error1];
+            [promise rejectWithError:error1];
         });
-        
-        return future2;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
@@ -351,15 +340,10 @@
     
     NSObject *obj1 = [NSObject new];
     
-    XMMMFuture *composedFuture = [future1 recoverWith:^XMMMFuture *(NSError *error) {
-        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
-        XMMMFuture *future2 = promise2.future;
-        
+    XMMMFuture *composedFuture = [future1 recoverWithPromise:^void (NSError *error, XMMMPromise *promise) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 resolveWithObject:obj1];
+            [promise resolveWithObject:obj1];
         });
-        
-        return future2;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
@@ -384,9 +368,8 @@
         [promise1 resolveWithObject:obj1];
     });
     
-    XMMMFuture *composedFuture = [future1 recoverWith:^XMMMFuture *(NSError *error) {
+    XMMMFuture *composedFuture = [future1 recoverWithPromise:^void (NSError *error, XMMMPromise *promise) {
         XCTFail(@"");
-        return nil;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
@@ -412,15 +395,10 @@
     
     NSError *error2 = [self error];
     
-    XMMMFuture *composedFuture = [future1 recoverWith:^XMMMFuture *(NSError *error) {
-        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
-        XMMMFuture *future2 = promise2.future;
-        
+    XMMMFuture *composedFuture = [future1 recoverWithPromise:^void (NSError *error, XMMMPromise *promise) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [promise2 rejectWithError:error2];
+            [promise rejectWithError:error2];
         });
-        
-        return future2;
     }];
     
     XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");

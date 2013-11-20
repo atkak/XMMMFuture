@@ -97,9 +97,9 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return [XMMMMappedFuture futureWithFuture:self mapBlock:block];
 }
 
-- (XMMMFuture *)flatMap:(XMMMFutureFlatMapBlock)block
+- (XMMMFuture *)mapWithPromise:(XMMMFutureMapWithPromiseBlock)block
 {
-    return [XMMMMappedFuture futureWithFuture:self flatMapBlock:block];
+    return [XMMMMappedFuture futureWithFuture:self mapWithPromiseBlock:block];
 }
 
 - (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
@@ -107,9 +107,9 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return [XMMMMappedFuture futureWithFuture:self recoverBlock:block];
 }
 
-- (XMMMFuture *)recoverWith:(XMMMFutureRecoverWithBlock)block
+- (XMMMFuture *)recoverWithPromise:(XMMMFutureRecoverWithPromiseBlock)block
 {
-    return [XMMMMappedFuture futureWithFuture:self recoverWithBlock:block];
+    return [XMMMMappedFuture futureWithFuture:self recoverWithPromiseBlock:block];
 }
 
 #pragma mark - Public methods (Promise resolvers)

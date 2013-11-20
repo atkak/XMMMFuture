@@ -7,6 +7,7 @@
 //
 
 #import "XMMMMappedFuture.h"
+#import "XMMMPromise.h"
 
 @interface XMMMMappedFuture ()
 
@@ -21,9 +22,9 @@
     return [[self alloc] initWithFuture:future mapBlock:block];
 }
 
-+ (instancetype)futureWithFuture:(XMMMFuture *)future flatMapBlock:(XMMMFutureFlatMapBlock)block
++ (instancetype)futureWithFuture:(XMMMFuture *)future mapWithPromiseBlock:(XMMMFutureMapWithPromiseBlock)block
 {
-    return [[self alloc] initWithFuture:future flatMapBlock:block];
+    return [[self alloc] initWithFuture:future mapWithPromiseBlock:block];
 }
 
 + (instancetype)futureWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block
@@ -31,9 +32,9 @@
     return [[self alloc] initWithFuture:future recoverBlock:block];
 }
 
-+ (instancetype)futureWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverWithPromiseBlock:(XMMMFutureRecoverWithPromiseBlock)block
 {
-    return [[self alloc] initWithFuture:future recoverWithBlock:block];
+    return [[self alloc] initWithFuture:future recoverWithPromiseBlock:block];
 }
 
 - (instancetype)initWithFuture:(XMMMFuture *)future mapBlock:(XMMMFutureMapBlock)block
@@ -52,14 +53,17 @@
     return self;
 }
 
-- (instancetype)initWithFuture:(XMMMFuture *)future flatMapBlock:(XMMMFutureFlatMapBlock)block
+- (instancetype)initWithFuture:(XMMMFuture *)future mapWithPromiseBlock:(XMMMFutureMapWithPromiseBlock)block
 {
     self = [super init];
     if (self) {
         _originalFuture = future;
         
         [future success:^(id result) {
-            XMMMFuture *newFuture = block(result);
+            XMMMPromise *newPromise = [XMMMPromise defaultPromise];
+            XMMMFuture *newFuture = newPromise.future;
+            
+            block(result, newPromise);
             
             [newFuture success:^(id result) {
                 [self resolveWithObject:result];
@@ -95,7 +99,7 @@
     return self;
 }
 
-- (instancetype)initWithFuture:(XMMMFuture *)future recoverWithBlock:(XMMMFutureRecoverWithBlock)block
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverWithPromiseBlock:(XMMMFutureRecoverWithPromiseBlock)block
 {
     self = [super init];
     if (self) {
@@ -104,7 +108,10 @@
         [future success:^(id result) {
             [self resolveWithObject:result];
         } failure:^(NSError *error) {
-            XMMMFuture *newFuture = block(error);
+            XMMMPromise *newPromise = [XMMMPromise defaultPromise];
+            XMMMFuture *newFuture = newPromise.future;
+            
+            block(error, newPromise);
             
             [newFuture success:^(id result) {
                 [self resolveWithObject:result];
