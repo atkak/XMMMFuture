@@ -1,17 +1,11 @@
 #XMMMFuture
-XMMMFuture is the Objective-C implementation of Future-Promise pattern. Future encapsulates the results of calculation in the future, and it makes possible to the composition of calculation.
+XMMMFuture is the Objective-C implementation of Future-Promise pattern. The Future object encapsulates the results of calculation in the future, and it makes possible to the composition of calculation.
 
 ##Installation with CocoaPods
 Add XMMMFuture to your Podfile.
 
 ```
 pod 'XMMMFuture'
-```
-
-Run CocoaPods.
-
-```
-$ pod install
 ```
 
 ##Requirement
@@ -22,7 +16,7 @@ $ pod install
 ##Usage
 ###Create Future
 
-`XMMMCreateFutureWithPromiseBlock` function creates Future object.
+The `XMMMCreateFutureWithPromiseBlock` function creates a Future object with a block which has a Promise object with arguments.
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
@@ -30,7 +24,7 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
 });
 ```
 
-You can also retrieve Future by creating Promise which owns Future. 
+You can also obtain a Future object from a Promise object which manages it.
 
 ``` objective-c
 XMMMPromise *promise = [XMMMPromise defaultPromise];
@@ -50,7 +44,7 @@ XMMMFuture *future = promise.future;
 ```
 
 ###Complete the calculation 
-XMMMPromise has a method `resolveWithObject:' and it lets a calculation success.
+XMMMPromise has the method `resolveWithObject:` which lets a calculation success.
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
@@ -67,7 +61,7 @@ XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
 } failure:nil completed:nil];
 ```
 
-XMMMPromise also has a method `rejectWithError:' and it lets a calculation failure.
+XMMMPromise also has the method `rejectWithError:` which lets a calculation failure.
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
@@ -122,4 +116,5 @@ XMMMFuture *composedFuture = [future mapWithPromise:^void (id result, XMMMPromis
 } failure:nil completed:nil];
 ```
 
-
+##License
+This software is released under the MIT License, see LICENSE.txt.
