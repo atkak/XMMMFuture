@@ -14,10 +14,14 @@
 typedef void (^XMMMFutureSuccessBlock)(id result);
 typedef void (^XMMMFutureFailureBlock)(NSError *error);
 typedef void (^XMMMFutureCompleteBlock)();
+
 typedef id (^XMMMFutureMapBlock)(id result);
+typedef XMMMFuture * (^XMMMFutureMapForFutureBlock)(id result);
 typedef void (^XMMMFutureMapWithPromiseBlock)(id result, XMMMPromise *promise);
 typedef id (^XMMMFutureRecoverBlock)(NSError *error);
+typedef XMMMFuture * (^XMMMFutureRecoverForFutureBlock)(NSError *error);
 typedef void (^XMMMFutureRecoverWithPromiseBlock)(NSError *error, XMMMPromise *promise);
+
 typedef void (^XMMMFuturePromiseBlock)(XMMMPromise *promise);
 
 @interface XMMMFuture : NSObject
@@ -33,8 +37,10 @@ typedef void (^XMMMFuturePromiseBlock)(XMMMPromise *promise);
           queue:(dispatch_queue_t)queue;
 
 - (XMMMFuture *)map:(XMMMFutureMapBlock)block;
+- (XMMMFuture *)mapForFuture:(XMMMFutureMapForFutureBlock)block;
 - (XMMMFuture *)mapWithPromise:(XMMMFutureMapWithPromiseBlock)block;
 - (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block;
+- (XMMMFuture *)recoverForFuture:(XMMMFutureRecoverForFutureBlock)block;
 - (XMMMFuture *)recoverWithPromise:(XMMMFutureRecoverWithPromiseBlock)block;
 
 @end

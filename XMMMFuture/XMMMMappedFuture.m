@@ -22,6 +22,11 @@
     return [[self alloc] initWithFuture:future mapBlock:block];
 }
 
++ (instancetype)futureWithFuture:(XMMMFuture *)future mapForFutureBlock:(XMMMFutureMapForFutureBlock)block
+{
+    return [[self alloc] initWithFuture:future mapForFutureBlock:block];
+}
+
 + (instancetype)futureWithFuture:(XMMMFuture *)future mapWithPromiseBlock:(XMMMFutureMapWithPromiseBlock)block
 {
     return [[self alloc] initWithFuture:future mapWithPromiseBlock:block];
@@ -30,6 +35,11 @@
 + (instancetype)futureWithFuture:(XMMMFuture *)future recoverBlock:(XMMMFutureRecoverBlock)block
 {
     return [[self alloc] initWithFuture:future recoverBlock:block];
+}
+
++ (instancetype)futureWithFuture:(XMMMFuture *)future recoverForFutureBlock:(XMMMFutureRecoverForFutureBlock)block
+{
+    return [[self alloc] initWithFuture:future recoverForFutureBlock:block];
 }
 
 + (instancetype)futureWithFuture:(XMMMFuture *)future recoverWithPromiseBlock:(XMMMFutureRecoverWithPromiseBlock)block
@@ -46,6 +56,27 @@
         [future success:^(id result) {
             id newResult = block(result);
             [self resolveWithObject:newResult];
+        } failure:^(NSError *error) {
+            [self rejectWithError:error];
+        } completed:nil];
+    }
+    return self;
+}
+
+- (instancetype)initWithFuture:(XMMMFuture *)future mapForFutureBlock:(XMMMFutureMapForFutureBlock)block
+{
+    self = [super init];
+    if (self) {
+        _originalFuture = future;
+        
+        [future success:^(id result) {
+            XMMMFuture *newFuture = block(result);
+            
+            [newFuture success:^(id result) {
+                [self resolveWithObject:result];
+            } failure:^(NSError *error) {
+                [self rejectWithError:error];
+            } completed:nil];
         } failure:^(NSError *error) {
             [self rejectWithError:error];
         } completed:nil];
@@ -94,6 +125,27 @@
             } else {
                 [self resolveWithObject:newResult];
             }
+        } completed:nil];
+    }
+    return self;
+}
+
+- (instancetype)initWithFuture:(XMMMFuture *)future recoverForFutureBlock:(XMMMFutureRecoverForFutureBlock)block
+{
+    self = [super init];
+    if (self) {
+        _originalFuture = future;
+        
+        [future success:^(id result) {
+            [self resolveWithObject:result];
+        } failure:^(NSError *error) {
+            XMMMFuture *newFuture = block(error);
+            
+            [newFuture success:^(id result) {
+                [self resolveWithObject:result];
+            } failure:^(NSError *error) {
+                [self rejectWithError:error];
+            } completed:nil];
         } completed:nil];
     }
     return self;

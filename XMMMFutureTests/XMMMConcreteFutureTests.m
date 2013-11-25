@@ -194,7 +194,99 @@
     }];
 }
 
-- (void)testFlatMap
+- (void)testMapForFuture
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSString *str1 = @"Hello";
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 resolveWithObject:str1];
+    });
+    
+    XMMMFuture *composedFuture = [future1 mapForFuture:^XMMMFuture *(id result) {
+        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
+        XMMMFuture *future2 = promise2.future;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [promise2 resolveWithObject:[result stringByAppendingString:@", world!"]];
+        });
+        
+        return future2;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTAssertEqualObjects(result, @"Hello, world!", @"");
+    } failure:^(NSError *error) {
+        XCTFail(@"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testMapForFutureFirstFutureFailed
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSError *error1 = [self error];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 rejectWithError:error1];
+    });
+    
+    XMMMFuture *composedFuture = [future1 mapForFuture:^XMMMFuture *(id result) {
+        XCTFail(@"");
+        return nil;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTFail(@"");
+    } failure:^(NSError *error) {
+        XCTAssertEqualObjects(error, error1, @"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testMapForFutureSecondFutureFailed
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSString *str1 = @"Hello";
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 resolveWithObject:str1];
+    });
+    
+    NSError *error1 = [self error];
+    
+    XMMMFuture *composedFuture = [future1 mapForFuture:^XMMMFuture *(id result) {
+        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
+        XMMMFuture *future2 = promise2.future;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [promise2 rejectWithError:error1];
+        });
+        
+        return future2;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTFail(@"");
+    } failure:^(NSError *error) {
+        XCTAssertEqualObjects(error, error1, @"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testMapWithPromise
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
@@ -221,7 +313,7 @@
     }];
 }
 
-- (void)testFlatMapFirstFutureFailed
+- (void)testMapWithPromiseFirstFutureFailed
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
@@ -246,7 +338,7 @@
     }];
 }
 
-- (void)testFlatMapSecondFutureFailed
+- (void)testMapWithPromiseSecondFutureFailed
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
@@ -328,7 +420,102 @@
     }];
 }
 
-- (void)testRecoverWith
+- (void)testRecoverForFuture
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSError *error1 = [self error];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 rejectWithError:error1];
+    });
+    
+    NSObject *obj1 = [NSObject new];
+    
+    XMMMFuture *composedFuture = [future1 recoverForFuture:^XMMMFuture *(NSError *error) {
+        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
+        XMMMFuture *future2 = promise2.future;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [promise2 resolveWithObject:obj1];
+        });
+        
+        return future2;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTAssertEqual(result, obj1, @"");
+    } failure:^(NSError *error) {
+        XCTFail(@"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testRecoverForFutureFirstFutureSucceeded
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSObject *obj1 = [NSObject new];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 resolveWithObject:obj1];
+    });
+    
+    XMMMFuture *composedFuture = [future1 recoverForFuture:^XMMMFuture *(NSError *error) {
+        XCTFail(@"");
+        return nil;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTAssertEqual(result, obj1, @"");
+    } failure:^(NSError *error) {
+        XCTFail(@"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testRecoverForFutureSecondFutureFailed
+{
+    XMMMPromise *promise1 = [XMMMPromise defaultPromise];
+    XMMMFuture *future1 = promise1.future;
+    
+    NSError *error1 = [self error];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise1 rejectWithError:error1];
+    });
+    
+    NSError *error2 = [self error];
+    
+    XMMMFuture *composedFuture = [future1 recoverForFuture:^XMMMFuture *(NSError *error) {
+        XMMMPromise *promise2 = [XMMMPromise defaultPromise];
+        XMMMFuture *future2 = promise2.future;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [promise2 rejectWithError:error2];
+        });
+        
+        return future2;
+    }];
+    
+    XCTAssertNotNil(composedFuture, @"Composed Future should not be nil.");
+    
+    [composedFuture success:^(id result) {
+        XCTFail(@"");
+    } failure:^(NSError *error) {
+        XCTAssertEqual(error, error2, @"");
+    } completed:^{
+        [self finishTest];
+    }];
+}
+
+- (void)testRecoverWithPromise
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
@@ -357,7 +544,7 @@
     }];
 }
 
-- (void)testRecoverWithFirstFutureSucceeded
+- (void)testRecoverWithPromiseFirstFutureSucceeded
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;
@@ -383,7 +570,7 @@
     }];
 }
 
-- (void)testRecoverWithSecondFutureFailed
+- (void)testRecoverWithPromiseSecondFutureFailed
 {
     XMMMPromise *promise1 = [XMMMPromise defaultPromise];
     XMMMFuture *future1 = promise1.future;

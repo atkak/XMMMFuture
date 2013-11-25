@@ -97,6 +97,11 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
     return [XMMMMappedFuture futureWithFuture:self mapBlock:block];
 }
 
+- (XMMMFuture *)mapForFuture:(XMMMFutureMapForFutureBlock)block
+{
+    return [XMMMMappedFuture futureWithFuture:self mapForFutureBlock:block];
+}
+
 - (XMMMFuture *)mapWithPromise:(XMMMFutureMapWithPromiseBlock)block
 {
     return [XMMMMappedFuture futureWithFuture:self mapWithPromiseBlock:block];
@@ -105,6 +110,11 @@ typedef NS_ENUM(NSInteger, XMMMFutureState) {
 - (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
 {
     return [XMMMMappedFuture futureWithFuture:self recoverBlock:block];
+}
+
+- (XMMMFuture *)recoverForFuture:(XMMMFutureRecoverForFutureBlock)block
+{
+    return [XMMMMappedFuture futureWithFuture:self recoverForFutureBlock:block];
 }
 
 - (XMMMFuture *)recoverWithPromise:(XMMMFutureRecoverWithPromiseBlock)block

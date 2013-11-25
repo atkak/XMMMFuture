@@ -32,6 +32,13 @@
                                  userInfo:nil];
 }
 
+- (XMMMFuture *)mapForFuture:(XMMMFutureMapForFutureBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
 - (XMMMFuture *)mapWithPromise:(XMMMFutureMapWithPromiseBlock)block
 {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
@@ -40,6 +47,13 @@
 }
 
 - (XMMMFuture *)recover:(XMMMFutureRecoverBlock)block
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
+                                 userInfo:nil];
+}
+
+- (XMMMFuture *)recoverForFuture:(XMMMFutureRecoverForFutureBlock)block
 {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"%s is not overriden at subclass", __PRETTY_FUNCTION__]
