@@ -1,11 +1,11 @@
 #XMMMFuture
-XMMMFuture is the Objective-C implementation of Future-Promise pattern. The Future object encapsulates the results of calculation in the future, and it makes possible to the composition of calculation.
+XMMMFuture is the Objective-C implementation of the Future - Promise pattern. The Future object encapsulates a result of calculation in the future, and it makes possible to a composition of calculation.
 
 ##Installation with CocoaPods
 Add XMMMFuture to your Podfile.
 
 ```
-pod 'XMMMFuture'
+pod 'XMMMFuture', '~> 0.1.0'
 ```
 
 ##Requirement
@@ -14,13 +14,13 @@ pod 'XMMMFuture'
 - ARC
 
 ##Usage
-###Create Future
+###Create Future for asynchronous calculation
 
 The `XMMMCreateFutureWithPromiseBlock` function creates a Future object with a block which has a Promise object with arguments.
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
-    // async process
+    // async calculation
 });
 ```
 
@@ -31,7 +31,11 @@ XMMMPromise *promise = [XMMMPromise defaultPromise];
 XMMMFuture *future = promise.future;
 ```
 
-###Handle results of the calculation
+###Create Future for synchronous long calculation
+
+This feature will be supported in future releases.
+
+###Handle results of calculation
 
 ``` objective-c
 [future success:^(id result) {
@@ -43,7 +47,8 @@ XMMMFuture *future = promise.future;
 }];
 ```
 
-###Complete the calculation 
+###Complete a calculation 
+
 XMMMPromise has the method `resolveWithObject:` which lets a calculation success.
 
 ``` objective-c
@@ -65,20 +70,21 @@ XMMMPromise also has the method `rejectWithError:` which lets a calculation fail
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
+    // Simulates an asynchronous calculation
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [promise resolveWithObject:@"Foo"];
+        [promise rejectWithError:error];
     });
 });
 
-// Print "Foo" after 2 second delay
-[future success:^(id result) {
-    NSLog(result); 
-} failure:nil completed:nil];
+// Print error description after 2 second delay
+[future success:nil failure:^(NSError *error) {
+    NSLog(@"%@", error.localizedDescription);
+} completed:nil];
 ```
 
-###Map the result
+###Map a result
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
@@ -96,7 +102,7 @@ XMMMFuture *mappedFuture = [future map:^id(id result) {
 } failure:nil completed:nil];
 ```
 
-###Map the result to asynchronous calculation
+###Map a result to asynchronous calculation
 
 ``` objective-c
 XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
@@ -113,6 +119,44 @@ XMMMFuture *composedFuture = [future mapWithPromise:^void (id result, XMMMPromis
 
 [composedFuture success:^(id result) {
     NSLog(result); // Hello, world!
+} failure:nil completed:nil];
+```
+
+###Recover an error and map a result
+
+``` objective-c
+XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [promise rejectWithError:error];
+    });
+});
+
+XMMMFuture *composedFuture = [future recover:^id(NSError *error) {
+    return @"Recovered!";
+}];
+
+[future success:^(id result) {
+    NSLog(result); // Recovered!
+} failure:nil completed:nil];
+```
+
+###Recover an error and map a result to asynchronous calculation
+
+``` objective-c
+XMMMFuture *future = XMMMCreateFutureWithPromiseBlock(^(XMMMPromise *promise) {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [promise rejectWithError:error];
+    });
+});
+
+XMMMFuture *composedFuture = [future recoverWithPromise:^void (NSError *error, XMMMPromise *promise) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [promise resolveWithObject:@"Recovered!"];
+    });
+}];
+
+[composedFuture success:^(id result) {
+    NSLog(result); // Recovered!
 } failure:nil completed:nil];
 ```
 
