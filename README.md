@@ -1,3 +1,5 @@
+https://travis-ci.org/xiongmaomaomao/XMMMFuture.png?branch=master
+
 #XMMMFuture
 XMMMFuture is the Objective-C implementation of the Future - Promise pattern. The Future object encapsulates a result of calculation in the future, and it makes possible to a composition of calculation.
 
