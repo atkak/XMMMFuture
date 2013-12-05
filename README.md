@@ -5,7 +5,7 @@ XMMMFuture is the Objective-C implementation of the Future - Promise pattern. Th
 Add XMMMFuture to your Podfile.
 
 ```
-pod 'XMMMFuture', '~> 0.1.0'
+pod 'XMMMFuture', :git => 'https://github.com/xiongmaomaomao/XMMMFuture.git'
 ```
 
 ##Requirement
